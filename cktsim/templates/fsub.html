@@ -1,0 +1,297 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Substractor | CircuitSim</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/addons/p5.sound.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</head>
+<body>
+    <div class="row">
+      <div class="col-md-12">
+        <div id="sketch-div">
+        <div id="p1">PIN 1:-
+          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-sm btn-outline-info">
+              <input required="required" type="radio" name="pin1" value="1">1
+            </label>
+            <label class="btn btn-sm btn-outline-danger">
+              <input required="required" type="radio" name="pin1" value="0" checked>0
+            </label>
+          </div>
+        </div>
+        <div id="p2">PIN 2:-
+          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-sm btn-outline-info"><input required="required" type="radio" name="pin2" value="1">1</label>
+            <label class="btn btn-sm btn-outline-danger"><input required="required" type="radio" name="pin2" value="0">0</label>
+          </div>
+        </div>
+        <div id="p3">PIN 3:-
+          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-sm btn-outline-info"><input required="required" type="radio" name="pin3" value="1">1</label>
+            <label class="btn btn-sm btn-outline-danger"><input required="required" type="radio" name="pin3" value="0">0</label>
+          </div>
+        </div>
+        </div>
+         <div>
+          <button class="btn btn-sm btn-success" onclick="btnchkr()">SIMULATE</button>
+        </div>
+        <br>
+        <div>
+          <button class="btn btn-sm btn-success" id="submit" onclick="checkallfilled()">ADD TO TABLE</button>
+        </div>
+        <br>
+        <div>
+        <button class="btn btn-sm btn-warning" onclick="reset()">RESET TABLE</button>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <table class="table-bordered table-striped" id="table">
+          <thead>
+            <tr>
+              <th scope="col" width="100px">A</th>
+              <th scope="col" width="100px">B</th>
+              <th scope="col" width="100px">C</th>
+              <th scope="col" width="200px">DIFFERENCE</th>
+              <th scope="col" width="200px">BORROW</th>
+            </tr>
+          </thead>
+          <tbody id="TT">
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <a href="{%url 'index'%}">HOME</a>
+    <script>  //ALGO JS
+        var obj1, obj2, img = [],
+  p1, p2, p3, b1, b2, pin1, pin2, pin3, fl = 0;
+
+function res() {
+  pin1 = parseInt($("input[name='pin1']:checked").val());
+  pin2 = parseInt($("input[name='pin2']:checked").val());
+  pin3 = parseInt($("input[name='pin3']:checked").val());
+  obj1 = new fullsubtractor();
+  obj1.setINP1(pin1);
+  obj1.setINP2(pin2);
+  obj1.setINP3(pin3);
+  obj1.logic();
+  b1.change(obj1.out_diff());
+  b2.change(obj1.out_borrow());
+}
+
+function checkallfilled() {
+  if (fl == 1) {
+    if ($('input[type="radio"]:checked').length == $('input[type="radio"]').length / 2) {
+      tabmaker();
+    } else {
+      alert("ALL PINS NOT SELECTED");
+    }
+  } else {
+    alert("SIMULATE YOUR CIRCUIT FIRST");
+  }
+}
+
+function btnchkr() {
+  if ($('input[type="radio"]:checked').length == $('input[type="radio"]').length / 2) {
+    res();
+    fl = 1;
+  } else {
+    alert("ALL PINS NOT SELECTED");
+  }
+}
+
+function tabmaker() {
+  var tab = "<tr>" + "</td><td>" + pin1 + "</td><td>" + pin2 + "</td><td>" + pin3 + "</td><td>" + obj1.out_diff() + "</td><td>" + obj1.out_borrow() + "</td></tr>";
+  document.querySelector("#TT").innerHTML += tab;
+  fl = 0;
+}
+
+function reset() {
+  document.querySelector("#TT").innerHTML = "";
+}
+    </script>
+    <script>  //GATES JS
+        class or {
+  constructor(sym) {
+    this.inpA = undefined;
+    this.inpB = undefined;
+    this.image = sym;
+    this.out = undefined;
+  }
+  setA(a) {
+    this.inpA = a;
+  }
+  setB(b) {
+    this.inpB = b;
+  }
+  compute() {
+    this.out = this.inpA || this.inpB;
+    return (this.out);
+  }
+}
+
+class and {
+  constructor(sym) {
+    this.inpA = undefined;
+    this.inpB = undefined;
+    this.image = sym;
+    this.out = undefined;
+  }
+  setA(a) {
+    this.inpA = a;
+  }
+  setB(b) {
+    this.inpB = b;
+  }
+  compute() {
+    this.out = this.inpA && this.inpB;
+    return (this.out);
+  }
+}
+
+class xor {
+  constructor(sym) {
+    this.inpA = undefined;
+    this.inpB = undefined;
+    this.image = sym;
+    this.out = undefined;
+  }
+  setA(a) {
+    this.inpA = a;
+  }
+  setB(b) {
+    this.inpB = b;
+  }
+  compute() {
+    this.out = this.inpA ^ this.inpB;
+    return (this.out);
+  }
+}
+
+class not {
+  constructor(sym) {
+    this.inpA = undefined;
+    this.out = undefined;
+    this.image = sym;
+  }
+  setA(a) {
+    this.inpA = a;
+  }
+  compute() {
+    this.out = (this.inpA == 0) ? 1 : 0;
+    return (this.out);
+  }
+}
+    </script>
+    <script>  //CKTS JS
+        class fullsubtractor {
+  constructor() {
+    this.inp1 = undefined;
+    this.inp2 = undefined;
+    this.inp3 = undefined;
+
+    this.xor1 = new xor();
+    this.xor2 = new xor();
+    this.not1 = new not();
+    this.not2 = new not();
+    this.and1 = new and();
+    this.and2 = new and();
+    this.or1 = new or();
+
+    this.diff = undefined;
+    this.borrow = undefined;
+  }
+
+  setINP1(inp1) {
+    this.inp1 = inp1;
+  }
+
+  setINP2(inp2) {
+    this.inp2 = inp2;
+  }
+
+  setINP3(inp3) {
+    this.inp3 = inp3;
+  }
+
+  logic() {
+    this.xor1.setA(this.inp1);
+    this.xor1.setB(this.inp2);
+    this.xor2.setA(this.inp3);
+    this.xor2.setB(this.xor1.compute());
+    this.diff = this.xor2.compute();
+    this.not1.setA(this.inp1);
+    this.and1.setA(this.not1.compute());
+    this.and1.setB(this.inp2);
+    this.not2.setA(this.xor1.compute());
+    this.and2.setA(this.not2.compute());
+    this.and2.setB(this.inp3);
+    this.or1.setA(this.and2.compute());
+    this.or1.setB(this.and1.compute());
+
+
+    this.borrow = this.or1.compute();
+  }
+
+  out_diff() {
+    return (this.diff);
+  }
+
+  out_borrow() {
+    return (this.borrow);
+  }
+}
+    </script>
+    <script>  //SKETCH JS
+        class bulb{
+  constructor(x,y){
+    this.col=color(200);
+    this.x=x;
+    this.y=y;
+  }
+  change(state){
+    if(state){
+      this.col=color(0,255,0);
+    }
+    else{
+      this.col=color(200);
+    }
+  }
+  show(){
+    fill(this.col);
+    circle(this.x,this.y,20);
+    }
+}
+
+var img;
+function preload(){
+  img=loadImage("{%static 'full_sub.jpg'%}");
+}
+function setup(){
+  canvas=createCanvas(1024,512);
+  canvas.parent('sketch-div')
+  image(img, 25, 0,1024,512);
+  p1=select("#p1");
+  p2=select("#p2");
+  p3=select("#p3");
+  b1=new bulb(404,438 );
+  b2=new bulb(469,439 );
+}
+function draw(){
+  p1.position(20,225);
+  p2.position(20,305);
+  p3.position(20,395);
+  b1.show();
+  b2.show();
+}
+
+    </script>
+</body>
+</html>

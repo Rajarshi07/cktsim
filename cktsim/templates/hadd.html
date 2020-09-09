@@ -1,0 +1,253 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Half Adder | CircuitSim</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/addons/p5.sound.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</head>
+<body>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="sketch-div">
+                <div id="p1">PIN 1:-
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-sm btn-outline-info">
+                        <input required="required" type="radio" name="pin1" value="1">1
+                        </label>
+                        <label class="btn btn-sm btn-outline-danger">
+                        <input required="required" type="radio" name="pin1" value="0" checked>0
+                        </label>
+                    </div>
+                </div>
+                <div id="p2">PIN 2:-
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-sm btn-outline-info"><input required="required" type="radio" name="pin2" value="1">1</label>
+                        <label class="btn btn-sm btn-outline-danger"><input required="required" type="radio" name="pin2" value="0">0</label>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button class="btn btn-sm btn-success" onclick="btnchkr()">SIMULATE</button>
+            </div>
+            <div>
+                <button class="btn btn-sm btn-success" id="submit" onclick="checkallfilled()">ADD TO TABLE</button>
+            </div>
+            <div>
+                <button class="btn btn-sm btn-warning" onclick="reset()">RESET TABLE</button>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <table class="table-bordered table-striped" id="table">
+                <thead>
+                    <tr>
+                    <th scope="col" width="100px">A</th>
+                    <th scope="col" width="100px">B</th>
+                    <th scope="col" width="100px">SUM</th>
+                    <th scope="col" width="100px">CARRY</th>
+                    </tr>
+                </thead>
+                <tbody id="TT">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <a href="{%url 'index'%}">HOME</a>
+    <script>  //ALGO JS
+        var obj1, obj2,
+        p1, p2, b1, b2, pin1, pin2, fl = 0;
+
+        function res() {
+        pin1 = parseInt($("input[name='pin1']:checked").val());
+        pin2 = parseInt($("input[name='pin2']:checked").val());
+        console.log(pin1, pin2)
+        obj1 = new halfadder();
+        obj1.setINP1(pin1);
+        obj1.setINP2(pin2);
+        obj1.logic();
+        b1.change(obj1.out_sum());
+        b2.change(obj1.out_carry());
+        }
+
+        function checkallfilled() {
+        if (fl == 1) {
+            if ($('input[type="radio"]:checked').length == $('input[type="radio"]').length / 2) {
+            tabmaker();
+            } else {
+            alert("ALL PINS NOT SELECTED");
+            }
+        } else {
+            alert("SIMULATE YOUR CIRCUIT FIRST");
+        }
+        }
+
+        function btnchkr() {
+        if ($('input[type="radio"]:checked').length == $('input[type="radio"]').length / 2) {
+            res();
+            fl = 1;
+        } else {
+            alert("ALL PINS NOT SELECTED");
+        }
+        }
+
+        function tabmaker() {
+        var tab = "<tr>" + "</td><td>" + pin1 + "</td><td>" + pin2 + "</td><td>" + obj1.out_sum() + "</td><td>" + obj1.out_carry() + "</td></tr>";
+        document.querySelector("#TT").innerHTML += tab;
+        fl = 0;
+        }
+
+        function reset() {
+        document.querySelector("#TT").innerHTML = "";
+        }
+    </script>
+    <script>  //GATES JS
+        class or{
+            constructor(sym){
+                this.inpA=undefined;
+                this.inpB=undefined;
+                this.image=sym;
+                this.out=undefined;
+            }
+            setA(a){
+                this.inpA=a;
+            }
+            setB(b){
+                this.inpB=b;
+            }
+            compute(){
+                this.out=this.inpA || this.inpB;
+                return(this.out);
+            }
+            }
+
+            class and{
+            constructor(sym){
+                this.inpA=undefined;
+                this.inpB=undefined;
+                this.image=sym;
+                this.out=undefined;
+            }
+            setA(a){
+                this.inpA=a;
+            }
+            setB(b){
+                this.inpB=b;
+            }
+            compute(){
+                this.out=this.inpA && this.inpB;
+                return(this.out);
+            }
+            }
+
+            class xor{
+            constructor(sym){
+                this.inpA=undefined;
+                this.inpB=undefined;
+                this.image=sym;
+                this.out=undefined;
+            }
+            setA(a){
+                this.inpA=a;
+            }
+            setB(b){
+                this.inpB=b;
+            }
+            compute(){
+                this.out=this.inpA ^ this.inpB;
+                return(this.out);
+            }
+        }          
+    </script>
+    <script>   //CKTS JS
+        class halfadder {
+            constructor() {
+            this.inp1 = undefined;
+            this.inp2 = undefined;
+
+            this.and1 = new and();
+            this.xor1 = new xor();
+
+            this.sum = undefined;
+            this.carry = undefined;
+            }
+
+            setINP1(inp1) {
+            this.inp1 = inp1;
+            }
+
+            setINP2(inp2) {
+            this.inp2 = inp2;
+            }
+
+            logic() {
+            this.xor1.setA(this.inp1);
+            this.xor1.setB(this.inp2);
+
+            this.sum = this.xor1.compute();
+
+            this.and1.setA(this.inp1);
+            this.and1.setB(this.inp2);
+
+            this.carry = this.and1.compute();
+            console.log(this.sum, this.carry)
+            }
+
+            out_sum() {
+            return (this.sum);
+            }
+
+            out_carry() {
+            return (this.carry);
+            }
+        }
+    </script>
+    <script>   //SKETCH JS
+        class bulb{
+            constructor(x,y){
+                this.col=color(200);
+                this.x=x;
+                this.y=y;
+            }
+            change(state){
+                if(state){
+                this.col=color(0,255,0);
+                }
+                else{
+                this.col=color(200);
+                }
+            }
+            show(){
+                fill(this.col);
+                circle(this.x,this.y,20);
+                }
+            }
+
+            var img;
+            function preload(){
+            img=loadImage("{%static 'half_adder.jpg'%}");
+            }
+            function setup(){
+            canvas=createCanvas(1024,512);
+            canvas.parent('sketch-div')
+            image(img, 0, 0,1024,512);
+            p1=select("#p1");
+            p2=select("#p2");
+            b1=new bulb(741,373);
+            b2=new bulb(845,372);
+            }
+            function draw(){
+            p1.position(16,275);
+            p2.position(16,365);
+            b1.show();
+            b2.show();
+            }
+    </script>
+</body>
+</html>
