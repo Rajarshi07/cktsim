@@ -26,3 +26,5 @@ def gate_nor(request):
     return render(request,"gate_nor.html")
 def gate_not(request):
     return render(request,"gate_not.html")
+def comp1bit(request):
+    return render(request,"comp1bit.html")

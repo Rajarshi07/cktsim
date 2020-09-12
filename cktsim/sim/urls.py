@@ -14,5 +14,6 @@ urlpatterns = [
     path('gate/nand/', views.gate_nand ,name='gate_nand'),
     path('gate/nor/', views.gate_nor ,name='gate_nor'),
     path('gate/not/', views.gate_not ,name='gate_not'),
+    path('comparator/comp1bit/',views.comp1bit, name='comp1bit'),
 
 ]
