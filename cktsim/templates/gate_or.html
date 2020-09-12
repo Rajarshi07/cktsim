@@ -1,0 +1,260 @@
+{%extends 'gate_base.html'%}
+{%load static%}
+{%block title%}Or Gate{%endblock%}
+{%block body%}
+<div class="row">
+    <div class="col-md-12">
+      <div id="sketch-div">
+      <div id="p1">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-sm btn-outline-info">
+            <input required="required" type="radio" name="pin1" value="1">ON
+          </label>
+          <label class="btn btn-sm btn-outline-danger">
+            <input required="required" type="radio" name="pin1" value="0" checked>OFF
+          </label>
+        </div>
+      </div>
+      <div id="p2">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-sm btn-outline-info"><input required="required" type="radio" name="pin2" value="1">ON</label>
+          <label class="btn btn-sm btn-outline-danger"><input required="required" type="radio" name="pin2" value="0">OFF</label>
+        </div>
+      </div>
+      </div>
+       <div>
+        <button class="btn btn-sm btn-success" onclick="btnchkr()">SIMULATE</button>
+        <button class="btn btn-sm btn-success" id="submit" onclick="checkallfilled()">ADD TO TABLE</button>
+      <button class="btn btn-sm btn-warning" onclick="reset()">RESET TABLE</button>
+      </div>
+    </div>
+    <div class="col-md-12">
+        <table class="table table-striped table-bordered table-hover table-sm" id="table">
+          <thead class="table-info">
+          <tr>
+            <th scope="col" width="100px">A</th>
+            <th scope="col" width="100px">B</th>
+            <th scope="col" width="100px">A+B</th>
+          </tr>
+        </thead>
+        <tbody id="TT">
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>  //ALGO
+      var obj1, b1,pin1, fl = 0;
+
+function res() {
+  pin1 = parseInt($("input[name='pin1']:checked").val());
+  pin2 = parseInt($("input[name='pin2']:checked").val());
+  obj1 = new or();
+  obj1.setA(pin1);
+  obj1.setB(pin2);
+  b1.change(obj1.compute());
+}
+
+function checkallfilled() {
+  if (fl == 1) {
+    if ($('input[type="radio"]:checked').length == $('input[type="radio"]').length / 2) {
+      tabmaker();
+    } else {
+      alert("ALL PINS NOT SELECTED");
+    }
+  } else {
+    alert("SIMULATE YOUR CIRCUIT FIRST");
+  }
+}
+
+function btnchkr() {
+  if ($('input[type="radio"]:checked').length == $('input[type="radio"]').length / 2) {
+    res();
+    fl = 1;
+  } else {
+    alert("ALL PINS NOT SELECTED");
+  }
+}
+
+function tabmaker() {
+  var tab = "<tr>" + "</td><td>" + pin1 + "</td><td>" + pin2 + "</td><td>" + obj1.compute()+ "</td></tr>";
+  document.querySelector("#TT").innerHTML += tab;
+  fl = 0;
+}
+
+function reset() {
+  document.querySelector("#TT").innerHTML = "";
+}
+  </script>
+  <script>//gates
+   class or {
+    constructor(sym) {
+      this.inpA = undefined;
+      this.inpB = undefined;
+      this.image = sym;
+      this.out = undefined;
+    }
+    setA(a) {
+      this.inpA = a;
+    }
+    setB(b) {
+      this.inpB = b;
+    }
+    compute() {
+      this.out = this.inpA || this.inpB;
+      return (this.out);
+    }
+  }
+
+  class and {
+    constructor(sym) {
+      this.inpA = undefined;
+      this.inpB = undefined;
+      this.image = sym;
+      this.out = undefined;
+    }
+    setA(a) {
+      this.inpA = a;
+    }
+    setB(b) {
+      this.inpB = b;
+    }
+    compute() {
+      this.out = this.inpA && this.inpB;
+      return (this.out);
+    }
+  }
+
+  class xor {
+    constructor(sym) {
+      this.inpA = undefined;
+      this.inpB = undefined;
+      this.image = sym;
+      this.out = undefined;
+    }
+    setA(a) {
+      this.inpA = a;
+    }
+    setB(b) {
+      this.inpB = b;
+    }
+    compute() {
+      this.out = this.inpA ^ this.inpB;
+      return (this.out);
+    }
+  }
+
+  class not {
+    constructor(sym) {
+      this.inpA = undefined;
+      this.out = undefined;
+      this.image = sym;
+    }
+    setA(a) {
+      this.inpA = a;
+    }
+    compute() {
+      this.inpA = !this.inpA;
+      return (Number(!this.out));
+    }
+  }
+
+  class nor {
+    constructor(sym) {
+      this.inpA = undefined;
+      this.inpB = undefined;
+      this.image = sym;
+      this.out = undefined;
+    }
+    setA(a) {
+      this.inpA = a;
+    }
+    setB(b) {
+      this.inpB = b;
+    }
+    compute() {
+      this.out = this.inpA || this.inpB;
+      return (Number(!this.out));
+    }
+  }
+
+  class nand {
+    constructor(sym) {
+      this.inpA = undefined;
+      this.inpB = undefined;
+      this.image = sym;
+      this.out = undefined;
+    }
+    setA(a) {
+      this.inpA = a;
+    }
+    setB(b) {
+      this.inpB = b;
+    }
+    compute() {
+      this.out = this.inpA && this.inpB;
+      return (Number(!this.out));
+    }
+  }
+
+  class xnor {
+    constructor(sym) {
+      this.inpA = undefined;
+      this.inpB = undefined;
+      this.image = sym;
+      this.out = undefined;
+    }
+    setA(a) {
+      this.inpA = a;
+    }
+    setB(b) {
+      this.inpB = b;
+    }
+    compute() {
+      this.out = this.inpA ^ this.inpB;
+      return (Number(!this.out));
+    }
+  }
+    
+  </script>
+  <script>//sketch
+class bulb{
+  constructor(x,y){
+    this.col=color(200);
+    this.x=x;
+    this.y=y;
+  }
+  change(state){
+    if(state){
+      this.col=color(0,255,0);
+    }
+    else{
+      this.col=color(200);
+    }
+  }
+  show(){
+    fill(this.col);
+    circle(this.x,this.y,40);
+    }
+}
+
+var img;
+function preload(){
+  img=loadImage("{%static 'or_gate.jpg'%}");
+}
+function setup(){
+  canvas=createCanvas(1024,512);
+  canvas.parent('sketch-div')
+  image(img, 0, 0,1024,512);
+  p1=select("#p1");
+  p2=select("#p2");
+  b1=new bulb(783,159 );
+}
+function draw(){
+  p1.position(149,103);
+  p2.position(149,189 );
+  b1.show();
+}
+
+
+  </script>
+{%endblock%}

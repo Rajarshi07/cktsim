@@ -32,34 +32,60 @@
             <div class="card-deck mb-3 text-center">
               <div class="card mb-4 box-shadow">
                 <div class="card-header">
-                  <h4 class="my-0 font-weight-normal text-dark">Half Adder</h4>
+                  <h4 class="my-0 font-weight-normal text-dark">Adder</h4>
                 </div>
                 <div class="card-body">
-                  <a href="{%url 'halfadder'%}" class="btn btn-block btn-outline-primary text-dark">Simulate</a>
+                  <ul class="list-unstyled mt-3 mb-4">
+                    <li class="my-0 font-weight-normal text-dark">Half Adder</li>
+                    <li><a href="{%url 'fulladder'%}" class="btn btn-block btn-outline-primary text-dark">Simulate</a></li>
+                  </ul>
+                  <ul class="list-unstyled mt-3 mb-4">
+                    <li class="my-0 font-weight-normal text-dark">Full Adder</li>
+                    <li><a href="{%url 'halfadder'%}" class="btn btn-block btn-outline-primary text-dark">Simulate</a></li>
+                  </ul>
                 </div>
               </div>
               <div class="card mb-4 box-shadow">
                 <div class="card-header">
-                  <h4 class="my-0 font-weight-normal text-dark">Full Adder</h4>
+                  <h4 class="my-0 font-weight-normal text-dark">Subtractor</h4>
                 </div>
                 <div class="card-body">
-                  <a href="{%url 'fulladder'%}" class="btn btn-block btn-outline-primary text-dark">Simulate</a>
+                  <ul class="list-unstyled mt-3 mb-4">
+                    <li class="my-0 font-weight-normal text-dark">Half Subtractor</li>
+                    <li><a href="{%url 'halfsubstractor'%}" class="btn btn-block btn-outline-primary text-dark">Simulate</a></li>
+                  </ul>
+                  <ul class="list-unstyled mt-3 mb-4">
+                    <li class="my-0 font-weight-normal text-dark">Full Subtractor</li>
+                    <li><a href="{%url 'fullsubstractor'%}" class="btn btn-block btn-outline-primary text-dark">Simulate</a></li>
+                  </ul>
                 </div>
               </div>
               <div class="card mb-4 box-shadow">
                 <div class="card-header">
-                  <h4 class="my-0 font-weight-normal text-dark">Half Substractor</h4>
+                  <h4 class="my-0 font-weight-normal text-dark">Gates</h4>
                 </div>
                 <div class="card-body">
-                  <a href="{%url 'halfsubstractor'%}" class="btn btn-block btn-outline-primary text-dark">Simulate</a>
-                </div>
-              </div>
-              <div class="card mb-4 box-shadow">
-                <div class="card-header">
-                  <h4 class="my-0 font-weight-normal text-dark">Full Substractor</h4>
-                </div>
-                <div class="card-body">
-                  <a href="{%url 'fullsubstractor'%}" class="btn btn-block btn-outline-primary text-dark">Simulate</a>
+                  <ul class="list-unstyled mt-3 mb-4">
+                    <li><a href="{%url 'gate_and'%}" class="btn btn-block btn-outline-primary text-dark">And Gate</a></li>
+                  </ul>
+                  <ul class="list-unstyled mt-3 mb-4">
+                    <li><a href="{%url 'gate_or'%}" class="btn btn-block btn-outline-primary text-dark">Or Gate</a></li>
+                  </ul>
+                  <ul class="list-unstyled mt-3 mb-4">
+                    <li><a href="{%url 'gate_not'%}" class="btn btn-block btn-outline-primary text-dark">Not Gate</a></li>
+                  </ul>
+                  <ul class="list-unstyled mt-3 mb-4">
+                    <li><a href="{%url 'gate_xor'%}" class="btn btn-block btn-outline-primary text-dark">Xor Gate</a></li>
+                  </ul>
+                  <ul class="list-unstyled mt-3 mb-4">
+                    <li><a href="{%url 'gate_nand'%}" class="btn btn-block btn-outline-primary text-dark">Nand Gate</a></li>
+                  </ul>
+                  <ul class="list-unstyled mt-3 mb-4">
+                    <li><a href="{%url 'gate_xnor'%}" class="btn btn-block btn-outline-primary text-dark">Xnor Gate</a></li>
+                  </ul>
+                  <ul class="list-unstyled mt-3 mb-4">
+                    <li><a href="{%url 'gate_nor'%}" class="btn btn-block btn-outline-primary text-dark">Nor Gate</a></li>
+                  </ul>
                 </div>
               </div>
             </div>
